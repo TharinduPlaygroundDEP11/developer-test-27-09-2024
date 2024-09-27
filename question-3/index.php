@@ -26,9 +26,7 @@ function reverseStringWithConditions($input) {
     return $result;
 }
 
-
-$input = "abc2024def";
-$output = reverseStringWithConditions($input);
-echo $output;
+$input = "abc123def";
+echo reverseStringWithConditions($input);
 
 ?>

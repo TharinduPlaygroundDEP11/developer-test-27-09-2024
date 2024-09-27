@@ -47,10 +47,19 @@ document.getElementById('registerForm')?.addEventListener('submit', async (event
             localStorage.setItem('token', data.token);
             window.location.href = 'app.html';
         } else {
-            alert(data.message || 'Registration failed');
+            if (data.messages) {
+                let errorMessages = '';
+                for (const field in data.messages) {
+                    errorMessages += `${data.messages[field].join(' ')}\n`;
+                }
+                alert(errorMessages);
+            } else {
+                alert(data.error || 'Registration failed');
+            }
         }
+
     } catch (error) {
-        console.error('Error:', error);
+        alert('An error occurred during registration. Please try again later');
     }
 });
 
@@ -66,28 +75,3 @@ document.getElementById('logout')?.addEventListener('click', () => {
     localStorage.removeItem('token');
     window.location.href = 'index.html';
 });
-
-// if (window.location.pathname === '/app.html') {
-//     loadTasks();
-// }
-
-// async function loadTasks() {
-//     const token = localStorage.getItem('token');
-
-//     try {
-//         const response = await fetch(`${apiUrl}/tasks`, {
-//             headers: { Authorization: `Bearer ${token}` },
-//         });
-
-//         const tasks = await response.json();
-//         const taskContainer = document.getElementById('taskContainer');
-
-//         tasks.forEach(task => {
-//             const taskElement = document.createElement('div');
-//             taskElement.textContent = `${task.name} - ${task.is_completed ? 'Completed' : 'Pending'}`;
-//             taskContainer.appendChild(taskElement);
-//         });
-//     } catch (error) {
-//         console.error('Error loading tasks:', error);
-//     }
-// }
