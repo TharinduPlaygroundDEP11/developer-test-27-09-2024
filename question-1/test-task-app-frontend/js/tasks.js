@@ -2,26 +2,42 @@
 const token = localStorage.getItem('token');
 
 document.getElementById('addTask').addEventListener('click', async () => {
+    const taskId = document.getElementById('addTask').dataset.taskId;
     const taskName = document.getElementById('taskName').value;
     const taskDescription = document.getElementById('taskDescription').value;
 
     try {
-        const response = await fetch(`${apiUrl}/tasks`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ name: taskName, description: taskDescription }),
-        });
+        let response;
+
+        if (taskId) {
+            response = await fetch(`${apiUrl}/tasks/${taskId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name: taskName, description: taskDescription }),
+            });
+        } else {
+            response = await fetch(`${apiUrl}/tasks`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name: taskName, description: taskDescription }),
+            });
+        }
 
         const task = await response.json();
         if (response.ok) {
             loadTasks();
             document.getElementById('taskName').value = '';
             document.getElementById('taskDescription').value = '';
+            document.getElementById('addTask').textContent = 'Add Task';
+            delete document.getElementById('addTask').dataset.taskId;
         } else {
-            alert(task.message || 'Failed to add task');
+            alert(task.message || 'Failed to add/update task');
         }
     } catch (error) {
         console.error('Error:', error);
@@ -42,15 +58,35 @@ async function loadTasks() {
             const taskElement = document.createElement('div');
             taskElement.classList.add('task');
 
+            const titleContainer = document.createElement('div');
+            titleContainer.classList.add('title-container');
+
+
             const taskName = document.createElement('div');
-            taskName.textContent = `${task.name} - ${task.is_completed ? 'Completed' : 'Pending'}`;
+            taskName.classList.add('task-name');
+            taskName.textContent = task.name;
+
+            const taskStatus = document.createElement('div');
+            taskStatus.classList.add('task-status');
+            taskStatus.textContent = `${task.is_completed ? 'Completed' : 'Pending'}`;
     
-            taskElement.appendChild(taskName);
+            titleContainer.appendChild(taskName);
+            titleContainer.appendChild(taskStatus);
+
+            taskElement.appendChild(titleContainer);
 
             const taskDescription = document.createElement('div');
             taskDescription.textContent = task.description;
 
             taskElement.appendChild(taskDescription);
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit';
+            editButton.addEventListener('click', () => editTask(task.id));
+            buttonContainer.appendChild(editButton);
 
             const completeButton = document.createElement('button');
             completeButton.textContent = 'Complete';
@@ -61,12 +97,37 @@ async function loadTasks() {
             deleteButton.textContent = 'Delete';
             deleteButton.addEventListener('click', () => deleteTask(task.id));
 
-            taskElement.appendChild(completeButton);
-            taskElement.appendChild(deleteButton);
+            buttonContainer.appendChild(completeButton);
+            buttonContainer.appendChild(deleteButton);
+            taskElement.appendChild(buttonContainer);
             taskContainer.appendChild(taskElement);
         });
     } catch (error) {
         console.error('Error loading tasks:', error);
+    }
+}
+
+async function editTask(taskId) {
+    try {
+        const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const task = await response.json();
+        if (response.ok) {
+            document.getElementById('taskName').value = task.name;
+            document.getElementById('taskDescription').value = task.description;
+
+            const addTaskButton = document.getElementById('addTask');
+            addTaskButton.textContent = 'Update Task';
+            addTaskButton.dataset.taskId = taskId;
+        } else {
+            alert(task.message || 'Failed to load task details');
+        }
+    } catch (error) {
+        console.error('Error fetching task details:', error);
     }
 }
 

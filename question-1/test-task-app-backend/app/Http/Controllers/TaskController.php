@@ -69,4 +69,15 @@ class TaskController extends Controller
 
         return response()->json($task);
     }
+
+    public function show($id)
+    {
+        $task = Task::find($id);
+
+        if (!$task || $task->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Task not found or unauthorized'], 404);
+        }
+
+        return response()->json($task);
+    }
 }

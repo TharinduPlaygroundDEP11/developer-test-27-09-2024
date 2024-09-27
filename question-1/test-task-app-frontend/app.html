@@ -8,12 +8,14 @@
 </head>
 <body>
     <div class="container">
-        <h2>Task Management App</h2>
-        <button id="logout">Logout</button>
+        <div class="header">
+            <h2>Task Management App</h2>
+            <button id="logout" style="width: 100px;">Logout</button>
+        </div>
 
         <div id="taskForm">
-            <input type="text" id="taskName" placeholder="Task Name" required>
-            <textarea id="taskDescription" placeholder="Task Description"></textarea>
+            <input type="text" id="taskName" placeholder="Task Name" required style="width: 80%; margin-bottom: 10px; padding: 10px">
+            <textarea id="taskDescription" placeholder="Task Description" style="width: 80%; margin-bottom: 10px; padding: 10px"></textarea>
             <button id="addTask">Add Task</button>
         </div>
 
