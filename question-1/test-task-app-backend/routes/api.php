@@ -30,5 +30,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
     Route::patch('/tasks/{task}/complete', [TaskController::class, 'markComplete']);
     Route::get('/tasks/{task}', [TaskController::class, 'show']);
-    Route::post('/logout', [UserController::class, 'logout']);
 });

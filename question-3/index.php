@@ -1,7 +1,6 @@
 <?php
 
-
-function reverseStringSkippingNumbers($input) {
+function reverseStringWithConditions($input) {
     $chars = str_split($input);
     
     $nonNumericChars = [];
@@ -28,8 +27,8 @@ function reverseStringSkippingNumbers($input) {
 }
 
 
-$input = "pte2024";
-$output = reverseStringSkippingNumbers($input);
+$input = "abc2024def";
+$output = reverseStringWithConditions($input);
 echo $output;
 
 ?>

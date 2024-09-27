@@ -67,27 +67,27 @@ document.getElementById('logout')?.addEventListener('click', () => {
     window.location.href = 'index.html';
 });
 
-if (window.location.pathname === '/app.html') {
-    loadTasks();
-}
+// if (window.location.pathname === '/app.html') {
+//     loadTasks();
+// }
 
-async function loadTasks() {
-    const token = localStorage.getItem('token');
+// async function loadTasks() {
+//     const token = localStorage.getItem('token');
 
-    try {
-        const response = await fetch(`${apiUrl}/tasks`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+//     try {
+//         const response = await fetch(`${apiUrl}/tasks`, {
+//             headers: { Authorization: `Bearer ${token}` },
+//         });
 
-        const tasks = await response.json();
-        const taskContainer = document.getElementById('taskContainer');
+//         const tasks = await response.json();
+//         const taskContainer = document.getElementById('taskContainer');
 
-        tasks.forEach(task => {
-            const taskElement = document.createElement('div');
-            taskElement.textContent = `${task.name} - ${task.is_completed ? 'Completed' : 'Pending'}`;
-            taskContainer.appendChild(taskElement);
-        });
-    } catch (error) {
-        console.error('Error loading tasks:', error);
-    }
-}
+//         tasks.forEach(task => {
+//             const taskElement = document.createElement('div');
+//             taskElement.textContent = `${task.name} - ${task.is_completed ? 'Completed' : 'Pending'}`;
+//             taskContainer.appendChild(taskElement);
+//         });
+//     } catch (error) {
+//         console.error('Error loading tasks:', error);
+//     }
+// }

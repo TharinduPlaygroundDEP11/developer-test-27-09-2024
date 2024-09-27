@@ -90,3 +90,41 @@ p {
     align-items: center;
     margin-bottom: 20px;
 }
+
+#progressBarContainer {
+    width: 100%;
+    background-color: #c2c2c2;
+    border-radius: 5px;
+    overflow: hidden;
+    display: none;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 20px;
+    background-color: #29a7bd;
+    transition: width 0.3s ease;
+}
+
+#taskForm {
+    border: 1px solid #141414;
+    padding: 10px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.button-container :first-child {
+    background-color: rgb(190, 190, 40);
+}
+
+.button-container :last-child {
+    background-color: rgb(189, 21, 21);
+}
+
+.button-container :nth-child(2) {
+    background-color: rgb(41, 80, 185);
+}

@@ -11,16 +11,16 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users',
-        //     'password' => 'required|string|min:8|confirmed',
-        // ]);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
         $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
         ]);
 
         if (!$user) {
@@ -48,11 +48,4 @@ class UserController extends Controller
 
         return response()->json(['token' => $token, 'user' => $user]);
     }
-
-    // public function logout()
-    // {
-    //     Auth::user()->tokens()->delete();
-
-    //     return response()->json(['message' => 'Logged out']);
-    // }
 }

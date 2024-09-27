@@ -1,4 +1,3 @@
-// const apiUrl = 'http://localhost:8000/api';
 const token = localStorage.getItem('token');
 
 document.getElementById('addTask').addEventListener('click', async () => {
@@ -9,6 +8,11 @@ document.getElementById('addTask').addEventListener('click', async () => {
     try {
         let response;
 
+        if (taskName === '') {
+            alert('Task name can not be empty');
+            return;
+        }
+        
         if (taskId) {
             response = await fetch(`${apiUrl}/tasks/${taskId}`, {
                 method: 'PATCH',
@@ -44,15 +48,36 @@ document.getElementById('addTask').addEventListener('click', async () => {
     }
 });
 
+function updateProgressBar(completedTasks, totalTasks) {
+    const progressBar = document.getElementById('progressBar');
+    const progressBarContainer = document.getElementById('progressBarContainer');
+
+    if (totalTasks > 0) {
+        const percentage = (completedTasks / totalTasks) * 100;
+        progressBar.style.width = percentage + '%';
+        progressBarContainer.style.display = 'block';
+    } else {
+        progressBar.style.width = '0%';
+        progressBarContainer.style.display = 'none';
+    }
+}
+
 async function loadTasks() {
+    const searchQuery = document.getElementById('search').value.toLowerCase();
+
     try {
         const response = await fetch(`${apiUrl}/tasks`, {
             headers: { 'Authorization': `Bearer ${token}` },
         });
 
-        const tasks = await response.json();
+        let tasks = await response.json();
         const taskContainer = document.getElementById('taskContainer');
         taskContainer.innerHTML = '';
+
+        const completedTasks = tasks.filter(task => task.is_completed).length;
+        updateProgressBar(completedTasks, tasks.length);
+
+        tasks = tasks.filter(task => task.name.toLowerCase().includes(searchQuery));
 
         tasks.forEach(task => {
             const taskElement = document.createElement('div');
